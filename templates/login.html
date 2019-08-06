@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>DevOps | Log in</title>
+    <!-- Bootstrap 3.3.7 -->
+    <style>
+{#        #image{#}
+{#            background-image: url("/static/img/login.png");#}
+{#        }#}
+    </style>
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/static/plugins/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/static/plugins/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/static/css/AdminLTE.min.css">
+
+
+</head>
+
+<body class="hold-transition login-page" id="image">
+<div class="login-box">
+    <div class="login-logo">
+        <a href="#"><b>DevOps</b></a>
+    </div>
+    <!-- /.login-logo -->
+
+    <div class="login-box-body">
+        <p class="login-box-msg">让技术产生价值</p>
+
+        <!--登陆表单-->
+        <form id="from_login" action="{% url 'accounts:login' %}" method="post" onsubmit="return false">
+            {% csrf_token %}
+            <!--用户名-->
+            <div class="form-group has-feedback">
+                <input id ="user" name="username" type="text" class="form-control" placeholder="用户名">
+                {#                {% if forms.username.errors %}#}
+                {#                    <span style="color:red">{{ forms.username.errors }}</span>#}
+                {#                {% endif %}#}
+            </div>
+            <!--密码-->
+            <div class="form-group has-feedback">
+                <input name="password" type="password" class="form-control" placeholder="密码">
+                {#                {% if forms.password.errors %}#}
+                {#                    <span style="color:red">{{ forms.password.errors }}</span>#}
+                {#                {% endif %}#}
+                {#                 <span id="errors" style="color:red"></span>#}
+            </div>
+            <!--错误信息及登陆-->
+            <div class="row">
+                <div class="col-xs-8">
+                    {#                    <span id="errors" style="color:red">{% if msg %} {{ msg }} {% else %}  {% endif %}</span>#}
+                    <span id="errors" style="color:red"></span>
+                </div>
+                <div class="col-xs-4">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
+                </div>
+            </div>
+        </form>
+
+        <!--忘记密码连接-->
+{#        <a id="forget" >忘记密码</a><br>#}
+        <a id='forget' style="cursor:pointer">忘记密码</a>
+    </div>
+
+</div>  <!--login-box-->
+</body>
+<script src="/static/js/jquery.min.js"></script>
+<script src="/static/js/jquery.cookie.js"></script>
+<script src="/static/js/sweetalert.min.js"></script>
+
+<script>
+
+    // 忘记密码
+    $('#forget').click(function () {
+        str="请联系管理员帮您重置密码"+'\n'+"邮箱：xxxxxx@gome.com.cn";
+        swal(str)
+    });
+
+    $('button').click(function () {
+        $.ajax({
+            url: "{% url 'accounts:login' %}",
+            type: "post",
+            dataType: "json",
+            data: $('#from_login').serialize(),
+            headers: {'X-CSRFtoken': $.cookie('csrftoken')},
+            success: function (data) {
+                console.log(data);
+                if (data.status === 0) {
+                    location.href = data["next_url"]
+                } else {
+                    $('#errors').html(data['errmsg']);
+                    console.log(data["errmsg"])
+                }
+            }
+        });
+    });
+</script>
+
+
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+<!-- head骨架部分 -->
+<head>
+
+    {% load static %}
+
+    <!-- 母版定义好最基础的资源，保证骨架没问题，各个子页面可以根据需要在block中重写 -->
+
+    <meta charset="utf-8">
+    <title>{% block title %} 自动化运维平台 {% endblock %} </title>
+
+    <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+    <!-- 字体库 -->
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome/css/font-awesome.min.css' %}">
+    <!-- 图标库 -->
+    <link rel="stylesheet" href="{% static 'plugins/Ionicons/css/ionicons.min.css' %}">
+    <!-- 弹框库 -->
+    <link rel="stylesheet" href="{% static 'plugins/alert/sweet-alert.css' %}">
+    <!-- 表格库 -->
+    <link rel="stylesheet" href="{% static 'plugins/footable/footable.core.css' %}">
+    <!-- 选框库 -->
+    <link rel="stylesheet" href="{% static 'plugins/select2/select2.min.css' %}">
+    <!-- 时间库 -->
+    <link rel="stylesheet" href="{% static 'plugins/timepicker/bootstrap-datepicker.min.css' %}">
+
+    <!-- AdminLTE模版样式-->
+    <link rel="stylesheet" href="{% static 'css/AdminLTE.min.css' %}">
+    <link rel="stylesheet" href="/static/css/_all-skins.min.css">
+
+    <!-- DataTble样式 -->
+    <link rel="stylesheet" href="/static/css/datatable.css">
+    <link rel="stylesheet" href="/static/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/jquery.dataTables.min.css">
+
+    <!-- 子页面可以自定义引入css -->
+    {% block css %}
+    {% endblock %}
+
+</head>
+
+<!-- body骨架部分 -->
+<body class="hold-transition skin-blue sidebar-mini">
+
+<!--整体骨架样式-->
+<div class="wrapper">
+
+    <!--第一层头部骨架-->
+    <header class="main-header">
+
+        <!-- 第一层左上角logo部分 -->
+        <a href="#" class="logo">
+            <!-- 收缩时显示DO -->
+            <span class="logo-mini"><b>D</b>O</span>
+            <!-- 伸展时显示DevOps -->
+            <span class="logo-lg"><b>DevOps</b></span>
+        </a>
+
+        <!-- 第一层右边内容 -->
+        <nav class="navbar navbar-static-top">
+
+            <!-- 控制收缩和伸展的按钮-->
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"></a>
+
+            <!-- 左边菜单栏 -->
+            <div class="navbar-custom-menu">
+                <!-- 用户退出及个人信息部分 -->
+                <ul class="nav navbar-nav">
+
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="{% static 'img/user2-160x160.jpg' %}" class="user-image" alt="User Image">
+                            <span class="hidden-xs">
+              {% if request.user.is_authenticated %} {{ request.user.username }} {% else %} 游客 {% endif %}
+          </span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <!-- 用户图像 -->
+                            <li class="user-header">
+                                <img src="{% static '/img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
+                                <p>
+                                    {{ request.user.username }}
+                                </p>
+                            </li>
+
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="{#% url 'users:user_detail' request.user.id %#}"
+                                       class="btn btn-default btn-flat">个人主页</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="{% url 'accounts:logout' %}" class="btn btn-default btn-flat">退出</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+
+        </nav>
+    </header>
+
+    <!-- 第二层左边 -->
+    <aside class="main-sidebar">
+
+        <!-- 第二层左边骨架 -->
+        <section class="sidebar">
+
+            <!-- 用户介绍 -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="{% static 'img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p></p>
+                    <a href="#"><i class="fa fa-circle text-success"></i>欢迎您:{{ request.user.username }}</a>
+                </div>
+            </div>
+
+
+            <!-- 菜单栏 -->
+            <ul class="sidebar-menu" data-widget="tree">
+                <!-- 菜单栏 -->
+                <li class="header">让技术产生生产力</li>
+
+                <!-- Dashboard -->
+                <li>
+                    <a href="/">
+                        <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <!-- 用户权限管理 -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-users"></i>
+                        <span>用户权限管理</span>
+                        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        {% if perms.users.change_userprofile %}
+                            <li><a href="{% url 'accounts:userlist' %}"><i class="fa fa-circle-o"></i> 用户管理</a></li>
+                            <li><a href="{#% url 'users:role_list' %#}"><i class="fa fa-circle-o"></i> 角色管理</a></li>
+                            <li><a href="{#% url 'users:power_list' %#}"><i class="fa fa-circle-o"></i> 权限管理</a></li>
+                        {% else %}
+                            <li><a href="{#% url 'users:user_detail' request.user.id %#}"><i class="fa fa-circle-o"></i>个人中心</a>
+                            </li>
+                            <li><a href="{#% url 'users:user_detail' request.user.id %#}"><i class="fa fa-circle-o"></i>用户列表</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                <!-- CMDB系统 -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-database"></i>
+                        <span>业务系统</span>
+                        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{#% url 'cmdb:host_list' %#}"><i class="fa fa-circle-o"></i> 业务管理</a></li>
+                        <li><a href="{#% url 'cmdb:product_detail' 1 %#}"><i class="fa fa-circle-o"></i> 产品线管理</a></li>
+                    </ul>
+                </li>
+
+                <!-- 代码发布系统 -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-rocket"></i>
+                        <span>代码发布系统</span>
+                        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{#% url 'deploy:project_list' %#}"><i class="fa fa-circle-o"></i>项目列表</a></li>
+                        <li><a href="{#% url 'deploy:apply' %#}"><i class="fa fa-circle-o"></i> 申请上线</a></li>
+                        <li><a href="{#% url 'deploy:list' %#}"><i class="fa fa-circle-o"></i> 申请列表 </a></li>
+                        <li><a href="{#% url 'deploy:history' %#}"><i class="fa fa-circle-o"></i> 发布历史</a></li>
+                    </ul>
+                </li>
+
+                <!-- 工单系统 -->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-tasks"></i>
+                        <span>工单系统</span>
+                        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{#% url 'workorder:apply' %#}"><i class="fa fa-circle-o"></i> 工单申请</a></li>
+                        <li><a href="{#% url 'workorder:list' %#}"><i class="fa fa-circle-o"></i> 工单列表</a></li>
+                        <li><a href="{#% url 'workorder:history' %#}"><i class="fa fa-circle-o"></i> 工单历史</a></li>
+                    </ul>
+                </li>
+
+                <!-- 图书管理系统 -->
+
+
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- 第二层右边内容部分 -->
+    <div class="content-wrapper">
+
+        <!-- 面包屑导航部分 -->
+        <section class="content-header">
+            {% block breadcrunb %}
+            {% endblock %}
+        </section>
+
+        <!-- 主要内容 -->
+        <section class="content">
+            {% block content %}
+            {% endblock %}
+        </section>
+
+    </div>
+    <!-- 第二层右边结束 -->
+
+
+    <!--第三层底部-->
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b></b>
+        </div>
+        <strong>Copyright &copy; 2014-2016 <a href="https://adminlte.io">adminlte</a></strong> All rights reserved
+    </footer>
+
+    <!-- ./wrapper结束-->
+</div>
+
+
+</body>
+
+
+<!-- 公共js部分 -->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<!-- Bootstrap 3.3.7 -->
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<!-- ChartJS -->
+<script src="{% static 'plugins/chart.js/Chart.min.js' %}"></script>
+<!-- alert -->
+<script src="{% static 'plugins/alert/sweet-alert.min.js' %}"></script>
+<!-- footable -->
+<script src='{% static 'plugins/footable/footable.all.min.js' %}'></script>
+<!-- datepicker -->
+<script src="{% static 'plugins/timepicker/bootstrap-datepicker.js' %}"></script>
+<!-- select2 -->
+<script src="{% static 'plugins/select2/select2.full.min.js' %}"></script>
+<!-- ace -->
+<script src="{% static 'plugins/ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
+<script src="{% static 'plugins/ace/ext-language_tools.js' %}" type="text/javascript" charset="utf-8"></script>
+<!-- ace -->
+<script src="{% static 'plugins/ladda/spin.min.js' %}"></script>
+<script src="{% static 'plugins/ladda/ladda.min.js' %}"></script>
+<script src="{% static 'plugins/ladda/ladda.jquery.min.js' %}"></script>
+
+<!-- AdminLTE App -->
+<script src="{% static 'js/adminlte.min.js' %}"></script>
+<script src="{% static 'js/dashboard2.js' %}"></script>
+<script src="{% static 'js/demo.js' %}"></script>
+
+
+<!--DataTable-->
+<script src="{% static 'js/datatable.js' %}"></script>
+{#<script src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>#}
+<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+
+
+<!-- 子页面可以根据需要添加js -->
+{% block js %}
+{% endblock %}
+
+</html>
