@@ -2,7 +2,7 @@ import datetime
 
 from django.shortcuts import render
 from django.views.generic import View, ListView
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse,QueryDict
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required, login_required
@@ -28,7 +28,6 @@ class IndexVew(LoginRequiredMixin, View):
         """处理分页"""
         try:
             page_num = request.GET.get('page', 1)  # 获取URL上第几页
-            print(page_num)
         except:
             page_num = 1  # 如果出错默认page等一1
 
@@ -41,6 +40,23 @@ class IndexVew(LoginRequiredMixin, View):
             object_list = object_list.filter(hostname=search)
         return render(request, "assets/assets.html", {"object_list":object_list, 'page_obj':page_obj, "total": count, "count_user": count_user, "vm": vmware, "kvm":kvm})
 
+
+    def delete(self, request):
+        """删除资产信息"""
+        ret = {"status": 0}
+
+        data = QueryDict(request.body)
+
+        host_id = data.get('id', None)
+        try:
+            host_obj = models.Assets.objects.get(pk=host_id).delete()
+
+        except host_obj.DoesNotExist:
+            ret["status"] = 1
+            ret["errmsg"] = "资产不存在"
+            return JsonResponse(ret)
+
+        return JsonResponse(ret)
 
 
 class CollectHostInfo(View):
@@ -67,6 +83,7 @@ class CollectHostInfo(View):
 
 class  Test(View):
     def get(self, request):
+
         return render(request, "index.html")
 
 

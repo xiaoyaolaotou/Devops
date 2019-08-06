@@ -135,7 +135,7 @@
                     <a type="button" class="btn btn-sm btn-success" href="">编辑</a>
                 </td>
                 <td style="padding: 0; margin: 0">
-                    <button type="button" id="delete-user" class="btn btn-sm btn-danger" href="">删除</button>
+                    <button type="button" id="" class="btn btn-sm btn-danger delete-user" data="{{ host.id }}">删除</button>
                 </td>
 
             </tr>
@@ -186,9 +186,29 @@
             });
 
             // 删除资产信息
-
-            $("#delete-user").click(function () {
-                
+            $(".delete-user").click(function () {
+                var host_id = $(this).attr("data");
+                console.log(host_id)
+                $.ajax({
+                    url: "{% url "assets:index" %}",
+                    type: "delete",
+                    data: {"id" : host_id},
+                    success: function (res) {
+                        if(res.status === 0){
+                            swal({
+                                "title": "资产删除成功",
+                                "text": "",
+                                "type": "success"
+                            }, function () {
+                                setTimeout(function () {
+                                    window.location.reload();
+                                })
+                            })
+                        }else {
+                            swal("操作失败", res.errmsg, "error");
+                        }
+                    }
+                })
             });
 
         })
