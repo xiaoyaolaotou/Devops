@@ -14,7 +14,6 @@
 
 ![image](img/valid.png)
 
-![image](img/dashboard.png)
 ![image](img/host.png)
 
 ### 开发进度
