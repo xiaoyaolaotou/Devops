@@ -8,84 +8,87 @@
 
 {% endblock %}
 
-    <!-- 第一层第一个图标-->
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+<!-- 第一层第一个图标-->
+<div class="col-md-3 col-sm-6 col-xs-12">
+    <div class="info-box">
+        <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
 
-            <div class="info-box-content">
-                <span class="info-box-text">CPU Traffic</span>
-                <span class="info-box-number">90<small>%</small></span>
-            </div>
-            <!-- /.info-box-content -->
+        <div class="info-box-content">
+            <span class="info-box-text">CPU Traffic</span>
+            <span class="info-box-number">90<small>%</small></span>
         </div>
-        <!-- /.info-box -->
+        <!-- /.info-box-content -->
     </div>
-    <!-- /.col -->
+    <!-- /.info-box -->
+</div>
+<!-- /.col -->
 
 
 {% block content %}
-<div class="row">
-    <!-- 第一层第一个图标-->
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+    <div class="row">
+        <!-- 第一层第一个图标-->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
 
-            <div class="info-box-content">
-                <span class="info-box-text">主机总数</span>
-                <span class="info-box-number">{{ total }}<small>台</small></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">主机总数</span>
+                    <span class="info-box-number">{{ total }}
+                        <small>台</small></span>
+                </div>
+                <!-- /.info-box-content -->
             </div>
-            <!-- /.info-box-content -->
+            <!-- /.info-box -->
         </div>
-        <!-- /.info-box -->
+        <!-- /.col -->
+
+
+        <!-- 第一层第二个图标-->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Vmware虚拟机</span>
+                    <span class="info-box-number">{{ vm }}
+                        <small>台</small></span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- 第一层第三个图标-->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">KVM虚拟机</span>
+                    <span class="info-box-number">{{ kvm }}
+                        <small>台</small></span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- 第一层第四个图标-->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">用户数</span>
+                    <span class="info-box-number">{{ count_user }}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
     </div>
-    <!-- /.col -->
-
-
-    <!-- 第一层第二个图标-->
-<div class="col-md-3 col-sm-6 col-xs-12">
-  <div class="info-box">
-    <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
-    <div class="info-box-content">
-      <span class="info-box-text">Vmware虚拟机</span>
-      <span class="info-box-number">{{ vm }}<small>台</small></span>
-    </div>
-    <!-- /.info-box-content -->
-  </div>
-  <!-- /.info-box -->
-</div>
-<!-- /.col -->
-
-    <!-- 第一层第三个图标-->
-<div class="col-md-3 col-sm-6 col-xs-12">
-  <div class="info-box">
-    <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
-
-    <div class="info-box-content">
-      <span class="info-box-text">KVM虚拟机</span>
-      <span class="info-box-number">{{ kvm }}<small>台</small></span>
-    </div>
-    <!-- /.info-box-content -->
-  </div>
-  <!-- /.info-box -->
-</div>
-<!-- /.col -->
-
-<!-- 第一层第四个图标-->
-<div class="col-md-3 col-sm-6 col-xs-12">
-  <div class="info-box">
-    <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
-
-    <div class="info-box-content">
-      <span class="info-box-text">用户数</span>
-      <span class="info-box-number">{{ count_user }}</span>
-    </div>
-    <!-- /.info-box-content -->
-  </div>
-  <!-- /.info-box -->
-</div>
-<!-- /.col -->
-</div>
 
     <!-- 搜索 -->
     <form class="form-inline">
@@ -132,7 +135,7 @@
                     <a type="button" class="btn btn-sm btn-success" href="">编辑</a>
                 </td>
                 <td style="padding: 0; margin: 0">
-                    <button type="button" class="btn btn-sm btn-danger" href="">删除</button>
+                    <button type="button" id="delete-user" class="btn btn-sm btn-danger" href="">删除</button>
                 </td>
 
             </tr>
@@ -144,32 +147,52 @@
 
     <!-- 分页 -->
     <div>
-    <center>
-        <ul class="pagination">
-         <li><a href="{#% url 'idc_list' %#}?page=1">首页</a></li>
-            {% if page_obj.has_previous %}
-                <li><a href="{#% url 'idc_list' %#}?page={{ page_obj.previous_page_number }}">上一页</a></li>
-        {% endif %}
-
-            {% for p in page_obj.paginator.page_range %}
-
-                {% if p == page_obj.number %}
-                    <li class="active"><a href="{#% url 'idc_list' %#}?page={{ p }}">{{ p }}</a></li>
-                {% else %}
-                    <li><a href="{#% url 'idc_list' %#}?page={{ p }}">{{ p }}</a></li>
+        <center>
+            <ul class="pagination">
+                <li><a href="{#% url 'idc_list' %#}?page=1">首页</a></li>
+                {% if page_obj.has_previous %}
+                    <li><a href="{#% url 'idc_list' %#}?page={{ page_obj.previous_page_number }}">上一页</a></li>
                 {% endif %}
-            {% endfor %}
 
-         {% if page_obj.has_next %}
-                <li><a href="{#% url 'idc_list' %#}?page={{ page_obj.next_page_number }}">下一页</a></li>
-        {% endif %}
+                {% for p in page_obj.paginator.page_range %}
 
-         <li><a href="{#% url 'idc_list' %#}?page={{ page_obj.paginator.num_pages }}">末页</a></li>
-        </ul>
-    </center>
+                    {% if p == page_obj.number %}
+                        <li class="active"><a href="{#% url 'idc_list' %#}?page={{ p }}">{{ p }}</a></li>
+                    {% else %}
+                        <li><a href="{#% url 'idc_list' %#}?page={{ p }}">{{ p }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li><a href="{#% url 'idc_list' %#}?page={{ page_obj.next_page_number }}">下一页</a></li>
+                {% endif %}
+
+                <li><a href="{#% url 'idc_list' %#}?page={{ page_obj.paginator.num_pages }}">末页</a></li>
+            </ul>
+        </center>
     </div>
 
+{% endblock %}
 
 
+{% block js %}
+    <script>
+        $(function () {
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    //xhr代指 XMLHttpRequest对象，
+                    xhr.setRequestHeader('X-CSRFtoken', $.cookie('csrftoken'));
+                }
+            });
+
+            // 删除资产信息
+
+            $("#delete-user").click(function () {
+                
+            });
+
+        })
+
+    </script>
 {% endblock %}
 
