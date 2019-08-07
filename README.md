@@ -5,6 +5,7 @@
 - 基于bootstrap3+django2.2 + python3.7
 - 采用cbv开发方式
 - 前端 JQuery
+- Agent自动注册资产信息与更新资产信息
 
 
 ### Demo
