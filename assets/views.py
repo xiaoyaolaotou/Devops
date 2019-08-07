@@ -1,5 +1,7 @@
+# 内部模块
 import datetime
 
+# 第三方模块
 from django.shortcuts import render
 from django.views.generic import View, ListView
 from django.http import HttpResponse, JsonResponse,QueryDict
@@ -81,10 +83,6 @@ class CollectHostInfo(View):
         return HttpResponse("")
 
 
-class  Test(View):
-    def get(self, request):
-
-        return render(request, "index.html")
 
 
 

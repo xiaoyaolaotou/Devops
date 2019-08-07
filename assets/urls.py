@@ -10,7 +10,6 @@ app_name = 'assets'
 urlpatterns = [
     re_path('^$', views.IndexVew.as_view(), name="index"),
     re_path('collect', views.CollectHostInfo.as_view(), name="collect"),
-    re_path('test', views.Test.as_view(), name="test"),
     re_path('api/v1/cmdb/collect', views.CollectHostInfo.as_view(), name="collect"),
 
 ]
