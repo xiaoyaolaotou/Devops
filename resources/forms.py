@@ -81,9 +81,10 @@ class CreateBussiness(forms.Form):
                             }
                             )
 
-    #
+
     def clean_business_chooics(self):
+        """选择业务线验证"""
         value = self.cleaned_data.get('business_chooics')
         if value == '0':
-            raise ValidationError("请选择!")
+            raise ValidationError("请选择业务线")
         return value
