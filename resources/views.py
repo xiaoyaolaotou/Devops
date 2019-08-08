@@ -16,7 +16,7 @@ class RessourcessIndexView(View):
     def get(self, request):
         """获取业务线"""
 
-        object_list = models.Bussiness.objects.all()
+        object_list = models.Bussiness.objects.all().order_by("-id")
 
         return render(request, "resources/resources.html", locals())
 
