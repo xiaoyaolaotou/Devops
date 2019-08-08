@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}更新业务{% endblock %}
+
+
+{% block breadcrunb %}
+
+    <h2>更新业务</h2>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-1">
+                <form  method="post" novalidate>
+                    {% csrf_token %}
+                    <div class="form-group {% if obj.virIP.errors.0 %}has-error{% else %}has-success{% endif %}">
+                        {{ obj.virIP.label }}
+                        {{ obj.virIP }}
+                        <span class="help-block">{{ obj.virIP.errors.0 }}</span>
+                    </div>
+
+                    <div class="form-group {% if obj.application.errors.0 %}has-error{% else %}has-success{% endif %}">
+                        {{ obj.application.label }}
+                        {{ obj.application }}
+                        <span class="help-block">{{ obj.application.errors.0 }}</span>
+                    </div>
+
+                    <div class="form-group {% if obj.port.errors.0 %}has-error{% else %}has-success{% endif %}">
+                        {{ obj.port.label }}
+                        {{ obj.port }}
+                        <span class="help-block">{{ obj.port.errors.0 }}</span>
+                    </div>
+
+                    <div class="form-group {% if obj.component.errors.0 %}has-error{% else %}has-success{% endif %}">
+                        {{ obj.component.label }}
+                        {{ obj.component }}
+                        <span class="help-block">{{ obj.component.errors.0 }}</span>
+                    </div>
+
+                    <div class="form-group {% if obj.business_chooics.errors.0 %}has-error{% else %}has-success{% endif %}">
+                        {{ obj.business_chooics.label }}
+                        {{ obj.business_chooics }}
+                        <span class="help-block">{{ obj.business_chooics.errors.0 }}</span>
+                    </div>
+
+                    <div class="form-group {% if obj.principal.errors.0 %}has-error{% else %}has-success{% endif %}">
+                        {{ obj.principal.label }}
+                        {{ obj.principal }}
+                        <span class="help-block">{{ obj.principal.errors.0 }}</span>
+                    </div>
+
+                    <div class="form-group {% if obj.note.errors.0 %}has-error{% else %}has-success{% endif %}">
+                        {{ obj.note.label }}
+                        {{ obj.note }}
+                        <span class="help-block">{{ obj.note.errors.0 }}</span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">提交</button>
+                        <button type="reset" class="btn btn-danger">重置</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

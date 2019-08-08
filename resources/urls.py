@@ -12,6 +12,7 @@ urlpatterns = [
     re_path('^bussiness/', include([
         re_path(r'^list/$', views.RessourcessIndexView.as_view(), name="resource_list"),
         re_path(r'^add/$', views.RessourcessaddView.as_view(), name="resource_add"),
+        re_path(r'^modify/$', views.RessourcessModifyView.as_view(), name="resource_modify"),
     ])),
 
 ]

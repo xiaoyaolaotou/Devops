@@ -8,7 +8,8 @@ class Bussiness(models.Model):
         (1, "O2M300"),
         (2, "O2M500"),
         (3, "O2M800"),
-        (4, "IM800")
+        (4, "IM800"),
+        (5, "供应链")
     )
 
     business_chooics = models.IntegerField(choices=business_type)

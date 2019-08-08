@@ -54,14 +54,56 @@
                 <td>{{ obj.note }}</td>
                 <td>
                     <div class="btn-group">
-                        <a href="#" class="btn btn-primary btn-sm ye-update"
-                           data-id="{{ obj.id }}">修改</a>
-                        <button class="btn btn-danger btn-sm ye-del" data-id="{{ obj.id }}">删除</button>
+                        <a href="{% url 'resources:resource_modify' %}?id={{ obj.id }}" class="btn btn-primary btn-sm ye-update">修改</a>
+                        <button class="btn btn-danger btn-sm ye-del deleteBusiness" data-id="{{ obj.id }}">删除</button>
                     </div>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+{% endblock %}
+
+
+{% block js %}
+    <script>
+
+        $(function () {
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    //xhr代指 XMLHttpRequest对象，
+                    xhr.setRequestHeader('X-CSRFtoken', $.cookie('csrftoken'));
+                }
+            });
+
+            // 删除业务线
+
+            $(".deleteBusiness").click(function () {
+                var delete_bussiness = $(this).attr('data-id');
+
+                $.ajax({
+                    url: "{% url 'resources:resource_list' %}",
+                    type: 'delete',
+                    data: {'bid': delete_bussiness},
+                    success: function (res) {
+                        if(res.status === 0){
+                            swal({
+                                "title": "业务删除成功",
+                                "text": "",
+                                "type": "success"
+                            },function () {
+                                setTimeout(function () {
+                                    location.reload();
+                                })
+                            })
+                        }else {
+                            swal("操作失败", res.errmsg, "error");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 
 {% endblock %}
