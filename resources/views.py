@@ -1,11 +1,15 @@
 #内置模块
 import datetime
+import os
+import time
+import xlwt
 
 #第三方模块
 from django.shortcuts import render, reverse
 from django.http import HttpResponse,JsonResponse, HttpResponseRedirect, QueryDict
 from django.views.generic import View
 from resources import models
+from django.conf import settings
 
 #自定义模块
 from resources import forms
@@ -104,6 +108,53 @@ class RessourcessModifyView(View):
             return render(request,"resources/resources_update.html", locals())
 
 
+
+
+class RessourcessUploadView(View):
+    """业务线导出"""
+    def get(self, request):
+
+        db = models.Bussiness.objects.all()
+        response = HttpResponse(content_type='application/vnd.ms-excel')
+
+        bt = ['业务ip', '业务名称', '业务端口', '业务用途', '业务线', '上线时间', '更新时间', '负责人', '备注']
+
+        wb = xlwt.Workbook(encoding='utf-8')
+        sh = wb.add_sheet("详情")
+        dateFormat = xlwt.XFStyle()
+        dateFormat.num_format_str = 'yyyy/mm/dd'
+
+        for i in range(len(bt)):
+            sh.write(0, i, bt[i])
+
+        for i in range(len(db)):
+            sh.write(i + 1, 0, db[i].virIP)
+            sh.write(i + 1, 1, db[i].application)
+            sh.write(i + 1, 2, db[i].port)
+            sh.write(i + 1, 3, db[i].component)
+            sh.write(i + 1, 4, db[i].business_chooics)
+            sh.write(i + 1, 5, db[i].ctime.strftime('%Y-%m-%d %H:%M:%S'))
+            sh.write(i + 1, 6, db[i].uptime.strftime('%Y-%m-%d %H:%M:%S'))
+            sh.write(i + 1, 7, db[i].note)
+            sh.write(i + 1, 8, db[i].principal)
+        response['Content-Disposition'] = 'attachment; filename=reources' + time.strftime('%Y%m%d', time.localtime(
+            time.time())) + '.xls'
+        wb.save(response)
+
+        return response
+
+
+# def RessourcessUploadView(request):
+#
+#     buss = request.FILES.get('bussiness', None)
+#     if buss:
+#
+#         path = os.path.join(settings.BASE_DIR,'resources','media', 'upload', str(time.time()))
+#         flandler = open(path, "wb")
+#         for chunk in buss.chunks():
+#             flandler.write(buss.read())
+#         flandler.close()
+#     return HttpResponse(buss.read())
 
 
 
