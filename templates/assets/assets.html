@@ -33,7 +33,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">主机总数</span>
-                    <span class="info-box-number">{{ total }}
+                    <span class="info-box-number">{{ count }}
                         <small>台</small></span>
                 </div>
                 <!-- /.info-box-content -->
@@ -49,7 +49,7 @@
                 <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Vmware虚拟机</span>
-                    <span class="info-box-number">{{ vm }}
+                    <span class="info-box-number">{{ vmware }}
                         <small>台</small></span>
                 </div>
                 <!-- /.info-box-content -->
@@ -94,17 +94,17 @@
     <form class="form-inline">
         <div class="form-group">
             <div class="input-group">
-                <input type="text" class="form-control" id="exampleInputAmount" name="search_username"
-                       placeholder="查询主机">
+                <input type="text" class="form-control" id="exampleInputAmount" name="keyword"
+                       placeholder="查询主机" value="{% if keyword %} {{ keyword }} {% endif %}">
             </div>
         </div>
         <button type="submit" class="btn btn-primary">搜索</button>
 
     </form>
 
-    <table class="table table-bordered table-hover table-striped">
+    <table class="table table-bordered table-hover table-striped" style="margin-top: 10px">
         <thead align="center">
-        <tr >
+        <tr>
             <th>#</th>
             <th>主机名</th>
             <th>IP地址</th>
@@ -131,11 +131,12 @@
                 <td>{{ host.os }}</td>
                 <td>{{ host.create_time |date:"Y-m-d H:i" }}</td>
                 <td>{{ host.update_time |date:"Y-m-d H:i" }}</td>
-{#                <td style="padding: 0; margin: 0">#}
-{#                    <a type="button" class="btn btn-sm btn-success" href="">编辑</a>#}
-{#                </td>#}
+                {#                <td style="padding: 0; margin: 0">#}
+                {#                    <a type="button" class="btn btn-sm btn-success" href="">编辑</a>#}
+                {#                </td>#}
                 <td style="padding: 0; margin: 0">
-                    <button type="button" id="" class="btn btn-sm btn-danger delete-user" data="{{ host.id }}">删除</button>
+                    <button type="button" id="" class="btn btn-sm btn-danger delete-user" data="{{ host.id }}">删除
+                    </button>
                 </td>
 
             </tr>
@@ -146,30 +147,13 @@
 
 
     <!-- 分页 -->
-    <div>
-        <center>
-            <ul class="pagination">
-                <li><a href="{#% url 'idc_list' %#}?page=1">首页</a></li>
-                {% if page_obj.has_previous %}
-                    <li><a href="{#% url 'idc_list' %#}?page={{ page_obj.previous_page_number }}">上一页</a></li>
-                {% endif %}
-
-                {% for p in page_obj.paginator.page_range %}
-
-                    {% if p == page_obj.number %}
-                        <li class="active"><a href="{#% url 'idc_list' %#}?page={{ p }}">{{ p }}</a></li>
-                    {% else %}
-                        <li><a href="{#% url 'idc_list' %#}?page={{ p }}">{{ p }}</a></li>
-                    {% endif %}
-                {% endfor %}
-
-                {% if page_obj.has_next %}
-                    <li><a href="{#% url 'idc_list' %#}?page={{ page_obj.next_page_number }}">下一页</a></li>
-                {% endif %}
-
-                <li><a href="{#% url 'idc_list' %#}?page={{ page_obj.paginator.num_pages }}">末页</a></li>
-            </ul>
-        </center>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                显示 [{{ paginator.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 的数据
+            </div>
+        </div>
+        {% include "paginator.html" %}
     </div>
 
 {% endblock %}
@@ -192,9 +176,9 @@
                 $.ajax({
                     url: "{% url "assets:index" %}",
                     type: "delete",
-                    data: {"id" : host_id},
+                    data: {"id": host_id},
                     success: function (res) {
-                        if(res.status === 0){
+                        if (res.status === 0) {
                             swal({
                                 "title": "资产删除成功",
                                 "text": "",
@@ -204,7 +188,7 @@
                                     window.location.reload();
                                 })
                             })
-                        }else {
+                        } else {
                             swal("操作失败", res.errmsg, "error");
                         }
                     }

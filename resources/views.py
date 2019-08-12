@@ -3,29 +3,51 @@ import datetime
 import os
 import time
 import xlwt
+import xlrd
+import transaction
 
 #第三方模块
 from django.shortcuts import render, reverse
 from django.http import HttpResponse,JsonResponse, HttpResponseRedirect, QueryDict
-from django.views.generic import View
+from django.views.generic import View, ListView
 from resources import models
 from django.conf import settings
+from pure_pagination.mixins import PaginationMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 
 #自定义模块
 from resources import forms
 
 
-class RessourcessIndexView(View):
 
-    def get(self, request):
-        """获取业务线"""
+class RessourcessIndexView(LoginRequiredMixin ,PaginationMixin ,ListView):
+    model = models.Bussiness
+    paginate_by = 10
+    template_name = "resources/resources.html"
+    login_url = "/login/"
+    keyword = ''
 
-        object_list = models.Bussiness.objects.all().order_by("-id")
 
-        return render(request, "resources/resources.html", locals())
+    def get_queryset(self):
+        """处理搜索"""
+        queryset = super(RessourcessIndexView, self).get_queryset()
+        self.keyword = self.request.GET.get("keyword", '').strip()
+        print(self.keyword)
+        if self.keyword:
+            queryset = queryset.filter(Q(virIP__icontains=self.keyword) | Q(application__icontains=self.keyword))
+        return queryset
+
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        """搜索回显"""
+        context = super(RessourcessIndexView, self).get_context_data(object_list=None, **kwargs)
+        context["keyword"] = self.keyword
+        return context
+
 
     def delete(self, request):
-        """删除业务线"""
+        # 删除业务线
         ret = {"status": 0}
 
         data = QueryDict(request.body)
@@ -37,6 +59,8 @@ class RessourcessIndexView(View):
             ret["errmsg"] = "该业务线不存在"
 
         return JsonResponse(ret)
+
+
 
 class RessourcessaddView(View):
 
@@ -111,8 +135,9 @@ class RessourcessModifyView(View):
 
 
 class RessourcessUploadView(View):
-    """业务线导出"""
+    """业务线导入导出"""
     def get(self, request):
+        """业务线导出"""
 
         db = models.Bussiness.objects.all()
         response = HttpResponse(content_type='application/vnd.ms-excel')
@@ -143,18 +168,6 @@ class RessourcessUploadView(View):
 
         return response
 
-
-# def RessourcessUploadView(request):
-#
-#     buss = request.FILES.get('bussiness', None)
-#     if buss:
-#
-#         path = os.path.join(settings.BASE_DIR,'resources','media', 'upload', str(time.time()))
-#         flandler = open(path, "wb")
-#         for chunk in buss.chunks():
-#             flandler.write(buss.read())
-#         flandler.close()
-#     return HttpResponse(buss.read())
 
 
 

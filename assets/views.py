@@ -11,40 +11,41 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionDenied, PermissionRequiredMixin
 from django.db.models import Q
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
+from pure_pagination.mixins import PaginationMixin
+from django.db.models import Q
 
 #自定义模块
 from assets import models
 
 
-class IndexVew(LoginRequiredMixin, View):
-    """访问首页"""
+class IndexVew(LoginRequiredMixin, PaginationMixin, ListView):
+    """首页"""
+    model = models.Assets
     login_url = "/login/"
-    def get(self, request, *args, **kwargs):
-        object_list = models.Assets.objects.all().order_by("-id")
-        count = models.Assets.objects.count() #主机总数
-        count_user = User.objects.all().count() # 用户数
-        vmware = models.Assets.objects.filter(server_type__icontains="VMware Virtual Platform").count() #VM虚拟机总数
-        kvm = models.Assets.objects.filter(server_type__icontains="kvm").count() #KVM虚拟机总数
+    paginate_by = 10
+    template_name = "assets/assets.html"
+    keyword = ''
 
-        """处理分页"""
-        try:
-            page_num = request.GET.get('page', 1)  # 获取URL上第几页
-        except:
-            page_num = 1  # 如果出错默认page等一1
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(IndexVew, self).get_context_data()
+        context["count"] = models.Assets.objects.count()
+        context["count_user"] = User.objects.all().count()
+        context["vmware"] = models.Assets.objects.filter(server_type__icontains="VMware Virtual Platform").count()  # VM虚拟机总数
+        context["kvm"] = models.Assets.objects.filter(server_type__icontains="kvm").count()  # KVM虚拟机总数
+        context["keyword"] = self.keyword
+        return context
 
-        paginator = Paginator(object_list, 10)  # 每页显示多少条
-        page_obj = paginator.page(page_num)
-        object_list = page_obj.object_list  # 当前页面的所有对象列表
+    def get_queryset(self):
+        """处理搜索"""
+        queryset = super(IndexVew, self).get_queryset()
+        self.keyword = self.request.GET.get('keyword', '').strip()
+        if self.keyword:
+            queryset = queryset.filter(Q(hostname__icontains=self.keyword) | Q(private_ip__icontains=self.keyword))
 
-        search = request.GET.get("search_username", None) #处理搜索功能
-        if search:
-            object_list = object_list.filter(hostname=search)
-        return render(request, "assets/assets.html", {"object_list":object_list, 'page_obj':page_obj, "total": count, "count_user": count_user, "vm": vmware, "kvm":kvm})
-
+        return queryset
 
     def delete(self, request):
-        """删除资产信息"""
+        # 删除资产信息
         ret = {"status": 0}
 
         data = QueryDict(request.body)
@@ -59,6 +60,7 @@ class IndexVew(LoginRequiredMixin, View):
             return JsonResponse(ret)
 
         return JsonResponse(ret)
+
 
 
 class CollectHostInfo(View):
