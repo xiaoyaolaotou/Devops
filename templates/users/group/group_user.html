@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+
+{% block title %} 用户组成员 {% endblock %}
+
+{% block breadcrunb %}
+
+    <h2>用户组成中</h2>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>组成员</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for group_user in group_user %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ group_user.username }}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" userid="{{ group_user.id }}" groupid= {{ g.id }}>删除</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+
+{% block js %}
+
+    <script>
+        $(function () {
+            //csrftoken
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    //xhr代指 XMLHttpRequest对象，
+                    xhr.setRequestHeader('X-CSRFtoken', $.cookie('csrftoken'));
+                }
+            });
+
+            // 删除组内用户
+            $(".btn-danger").click(function () {
+                var uid = $(this).attr("userid");
+                var gid = $(this).attr("groupid");
+
+                $.ajax({
+                    url: "{% url 'accounts:group_userlist' %}",
+                    dataType: "json",
+                    type: "delete",
+                    data: {'uid': uid, 'gid': gid},
+                    success: function (res) {
+                        if (res.status === 0) {
+                            swal({
+                                "title": "删除成功",
+                                "text": "",
+                                "type": "success"
+                            }, function () {
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 200)
+                            })
+                        } else {
+                            swal("删除失败", res.errmsg, "error");
+                        }
+
+                    }
+                })
+
+            })
+
+        })
+    </script>
+
+{% endblock %}

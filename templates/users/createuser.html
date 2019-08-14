@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+
+{% block title %} 添加用户 {% endblock %}
+
+
+{% block breadcrunb %}
+
+<h2>创建用户</h2>
+
+{% endblock %}
+
+{% block content %}
+
+     <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-1">
+
+                <form action="{% url 'accounts:createuser' %}" method="post" novalidate id="fromuser">
+                        {% csrf_token %}
+                        <div class="form-group {% if obj.username.errors.0 %}has-error{% else %}has-success{% endif %}">
+                            {{ obj.username.label }}
+                            {{ obj.username }}
+                            <span class="help-block">{{ obj.username.errors.0 }}</span>
+                        </div>
+
+                        <div class="form-group {% if obj.password.errors.0 %}has-error{% else %}has-success{% endif %}">
+                            {{ obj.password.label }}
+                            {{ obj.password }}
+                        </div>
+
+                        <div class="form-group {% if obj.re_password.errors.0 %}has-error{% else %}has-success{% endif %}">
+                            {{ obj.re_password.label }}
+                            {{ obj.re_password }}
+                        </div>
+                        <span class="help-block">{{ obj.re_password.errors.0 }}</span>
+                        <div class="form-group {% if obj.email.errors.0 %}has-error{% else %}has-success{% endif %}">
+                            {{ obj.email.label }}
+                            {{ obj.email }}
+                        </div>
+                        <span class="help-block">{{ obj.email.errors.0 }}</span>
+
+                        <div class="modal-footer">
+                            <button type="reset" class="btn btn-danger" data-dismiss="modal">重置</button>
+                            <button type="submit" class="btn btn-primary" id="sure">确认</button>
+                        </div>
+                    </form>
+
+
+            </div>
+        </div>
+     </div>
+
+
+{% endblock %}

@@ -53,7 +53,11 @@ class RessourcessIndexView(LoginRequiredMixin ,PaginationMixin ,ListView):
         data = QueryDict(request.body)
         bid = data.get("bid", None)
         try:
-            obj = models.Bussiness.objects.get(pk=bid).delete()
+            if request.user.has_perm("resources:delete_bussiness"):
+                obj = models.Bussiness.objects.get(pk=bid).delete()
+            else:
+                ret["status"] = 1
+                ret["errmsg"] = "你没有该删除权限, 滚!"
         except Exception as e:
             ret["status"] = 1
             ret["errmsg"] = "该业务线不存在"

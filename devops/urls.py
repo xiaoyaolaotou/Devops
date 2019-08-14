@@ -21,5 +21,5 @@ urlpatterns = [
     path('', include("accounts.urls")),
     path('', include("assets.urls")),
     path('resources/', include("resources.urls")),
-    #re_path('api/v1/cmdb', include("assets.urls")),
+
 ]

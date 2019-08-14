@@ -52,7 +52,11 @@ class IndexVew(LoginRequiredMixin, PaginationMixin, ListView):
 
         host_id = data.get('id', None)
         try:
-            host_obj = models.Assets.objects.get(pk=host_id).delete()
+            if request.user.has_perm("assets:delete_assets"):
+                host_obj = models.Assets.objects.get(pk=host_id).delete()
+            else:
+                ret["status"] = 1
+                ret["errmsg"] = "没有该删除权限, 滚!"
 
         except host_obj.DoesNotExist:
             ret["status"] = 1
@@ -84,6 +88,15 @@ class CollectHostInfo(View):
 
         return HttpResponse("")
 
+
+class ErrorView(View):
+    """没有权限提示页面"""
+    def get(self, request):
+        return render(request, 'error.html')
+
+class SuccessView(View):
+    def get(self, request):
+        return render(request, "success.html")
 
 
 

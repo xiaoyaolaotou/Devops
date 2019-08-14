@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+
+{% block title %} 修改组权限{% endblock %}
+
+{% block css %}
+    <style>
+        .check_label {
+            user-select: none
+        }
+    .permission-point{
+        margin-left: 230px !important;
+    }
+    .permission-context{
+         width: 200px !important;
+    }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+    <form action="" class="form-horizontal" method="post">
+    {% csrf_token %}
+        <dl class="dl-horizontal">
+            {% for contenttype in contenttypes %}
+                <dt class="permission-context">{{ contenttype.app_label }} -> {{ contenttype.model }}</dt>
+                <dd class="permission-point">
+                    <ul class="list-unstyled">
+                        {% for permission in contenttype.permission_set.all %}
+                            <li>
+                                <input type="checkbox" name="permission" value="{{ permission.id }}"
+                                       {% if permission.id in group_permissions  %}
+                                           checked
+                                        {% endif %}
+                                       id="{{ permission.codename }}_{{ forloop.counter }}">
+                                <label class="check_label"
+                                       for="{{ permission.codename }}_{{ forloop.counter }}">{{ permission.name }}</label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                </dd>
+            {% endfor %}
+        </dl>
+
+    <div class="form-group form-footer">
+        <div class="col-sm-offset-2 col-sm-6">
+            <input type="hidden" name="groupid" value="{{ group }}">
+            <button type="submit" class="btn btn-primary">提交</button>
+            <button type="reset" class="btn btn-danger">重置</button>
+        </div>
+
+    </div>
+
+    </form>
+
+
+{% endblock %}

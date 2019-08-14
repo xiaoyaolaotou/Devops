@@ -21,6 +21,9 @@
 
 ![image](img/valid_bussiness.png)
 
+![image](img/group.png)
+
+![image](img/permission.png)
 
 ### 开发进度
 

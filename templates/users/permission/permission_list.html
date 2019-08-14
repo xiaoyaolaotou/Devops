@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %} 权限列表 {% endblock %}
+
+{% block breadcrunb %}
+
+    <h2>权限列表</h2>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <!-- 搜索 -->
+    <form class="form-inline"
+          enctype="multipart/form-data">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" class="form-control" id="exampleInputAmount" name="keyword"
+                       placeholder="model /codename" value="{% if keyword %}{{ keyword }} {% endif %}">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">搜索</button>
+
+            {% if perms.auth.add_permission %}
+            <a class="btn  btn-success" href="{% url 'accounts:permission_add' %}">创建权限</a>
+            {% endif %}
+    </form>
+
+
+
+    <table class="table table-striped" style="margin-top: 10px">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>app</th>
+            <th>model</th>
+            <th>codename</th>
+            <th>name</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for permission in permission %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ permission.content_type.app_label }}</td>
+                <td>{{ permission.content_type.model }}</td>
+                <td>{{ permission.codename }}</td>
+                <td>{{ permission.name }}</td>
+                <td>
+                    <button class="btn btn-primary btn-sm">修改</button>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- 分页 -->
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                显示 [{{ paginator.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 的数据
+            </div>
+        </div>
+        {% include "paginator.html" %}
+    </div>
+
+{% endblock %}

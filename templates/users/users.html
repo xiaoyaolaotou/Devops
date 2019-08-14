@@ -7,13 +7,31 @@
 {% endblock %}
 
 {% block content %}
-    <table class="table table-striped table-bordered table-hover success">
+    <caption>
+        <form class="form-inline">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="exampleInputAmount" name="keyword"
+                           placeholder="查询用户" value="{% if keyword %}{{ keyword }} {% endif %}">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">搜索</button>
+            {% if perms.auth.add_user %}
+                <a href="{% url 'accounts:createuser' %}" type="button" class="btn btn-success" id="add_user">创建用户</a>
+            {% endif %}
+        </form>
+    </caption>
+
+
+    <table class="table table-striped table-bordered table-hover success" style="margin-top: 10px">
         <thead>
         <tr>
             <th>#</th>
             <th>用户名</th>
             <th>电子邮件</th>
             <th>状态</th>
+            <th>最后登录时间</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
@@ -28,9 +46,192 @@
                 {% else %}
                     <td>禁用</td>
                 {% endif %}
+                <td>{{ us.last_login | date:"Y-m-d H:i" }}</td>
+                <td>
+                {% if perms.auth.change_user %}
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu1"
+                                data-toggle="dropdown">
+                            修改
+                            <span class="caret"></span>
+                        </button>
+
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1"
+                                   data={{ us.id }}  class="user_to_group">添加到指定组</a>
+                            </li>
+                        </ul>
+                    {% endif %}
+
+                        {% if us.is_active %}
+                            <button type="button" class="btn btn-sm btn-warning modify_user_status"
+                                    status="{{ us.is_active|lower }}" data="{{ us.id }}">禁用
+                            </button>
+                        {% else %}
+
+                            <button type="button" class="btn btn-sm btn-info modify_user_status "
+                                    status="{{ us.is_active|lower }}" data="{{ us.id }}">启用
+                            </button>
+                        {% endif %}
+
+                        <button type="button" class="btn btn-sm btn-danger delete_user" data="{{ us.id }}">
+                            删除
+                        </button>
+
+                    </div>
+                </td>
             </tr>
+
         {% endfor %}
 
         </tbody>
     </table>
+
+
+    <!-- 分页 -->
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                显示 [{{ paginator.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 的数据
+            </div>
+        </div>
+        {% include "paginator.html" %}
+    </div>
+
+
+    <!-- 模态框 -->
+
+    <div class="modal fade" id="user_to_group_modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+
+                    <h4 id="user_to_group_modal_title">将用户添加至组</h4>
+
+                </div>
+                <div class="modal-body clearfix">
+                    <div class="col-xs-8" id="select_service_id">
+                        <select class="chosen-select chosen-transparent form-control" id="all_user_group">
+                            {% for i in group_dd %}
+                                <option value="{{ i.id }}">{{ i.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="user_to_group_btn">提交</button>
+                </div>
+                <div class="modal-footer">
+
+                    <input class="btn btn-default" data-dismiss="modal" aria-hidden="true" type="button" value="取消">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+
+{% block js %}
+
+    <script>
+        $(function () {
+            //csrftoken
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    //xhr代指 XMLHttpRequest对象，
+                    xhr.setRequestHeader('X-CSRFtoken', $.cookie('csrftoken'));
+                }
+            });
+
+            // 删除用户
+
+            $(".delete_user").click(function () {
+                var uid = $(this).attr("data");
+                $.ajax({
+                    url: "{% url 'accounts:userlist' %}",
+                    type: "delete",
+                    data: {uid: uid},
+                    success: function (res) {
+                        if (res.status === 0) {
+                            swal({
+                                "title": "用户删除成功",
+                                "text": res.errmsg,
+                                "type": "success"
+                            }, function () {
+                                setTimeout(function () {
+                                    window.location.reload()
+                                }, 200)
+                            })
+                        } else {
+                            swal("用户删除失败", res.errmsg, "error")
+                        }
+                    }
+                })
+            });
+
+
+            // 用户开启与禁止
+            $(".modify_user_status").click(function () {
+                var uid = $(this).attr("data");
+                $.ajax({
+                    url: "",
+                    type: "put",
+                    data: {'uid': uid},
+                    success: function (res) {
+                        if (res.status === 0) {
+                            location.reload()
+                        } else {
+                            swal("操作失败", res.errmsg, "error");
+                        }
+                    }
+                })
+            });
+
+
+            // 将用户添加至指定组
+            $(".user_to_group").click(function () {
+                var uid = $(this).attr("data");
+                $("#user_to_group_modal").modal("show");
+
+                $("#user_to_group_btn").click(function () {
+                    var groupid = $(".chosen-select").val();
+                    $.ajax({
+                        url: "{% url 'accounts:userlist' %}",
+                        dataType: "json",
+                        type: "post",
+                        data: {"uid": uid, "gid": groupid},
+                        success: function (data) {
+                            if (data.status === 0) {
+                                swal({
+                                    "title": "用户组添加成功",
+                                    "text": "",
+                                    "type": "success"
+                                }, function () {
+                                    setTimeout(function () {
+                                        window.location.reload()
+                                    }, 200)
+                                })
+                            } else {
+                                swal('操作失败', data.errmsg, 'error');
+                                $('#user_to_group_modal').modal('hide');
+
+                            }
+                        }
+                    })
+                })
+
+
+            });
+
+
+        });
+    </script>
+
+
 {% endblock %}
