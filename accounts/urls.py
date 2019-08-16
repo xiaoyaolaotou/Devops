@@ -14,6 +14,7 @@ urlpatterns = [
     re_path(r'^logout/$', views.LogoutView.as_view(), name="logout"),
     re_path(r'^userlist/$', views.UserInfoView.as_view(), name="userlist"),
     re_path(r'^createuser/$', views.UserCreateUserView.as_view(), name="createuser"),
+    re_path(r'^changepasswd/$', views.UserChangePwd.as_view(), name="changepasswd"),
 
     re_path(r'^group/', include([
         re_path(r'^$', views.GroupListView.as_view(), name="grouplist"),
@@ -21,13 +22,14 @@ urlpatterns = [
         re_path(r'^delete/$', views.GroupDeleteView.as_view(), name="groupdelete"),
         re_path(r'^grouplist/$', views.GroupGrouplistView.as_view(), name="group_userlist"),
         re_path(r'permission/', include([
-            re_path(r'^modify/$' ,views.ModifyGroupPermissionList.as_view(), name="group_permission_modify")
+            re_path(r'^modify/$', views.ModifyGroupPermissionList.as_view(), name="group_permission_modify"),
+            re_path(r'^view/$', views.PermissionViewView.as_view(), name='permission_view'),
         ])),
     ])),
 
     re_path(r'^permission/', include([
         re_path(r'^list/$', permission.PermissionListView.as_view(), name='permission_list'),
-        re_path(r'^add/$', permission.PermissionCreateView.as_view(), name='permission_add')
+        re_path(r'^add/$', permission.PermissionCreateView.as_view(), name='permission_add'),
     ])),
 
 ]

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+
+
+{% block title %} 查看组权限 {% endblock %}
+
+{% block breadcrunb %}
+
+    <h2>查看组权限</h2>
+
+{% endblock %}
+
+
+{% block content %}
+
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>app名称</th>
+            <th>model名称</th>
+            <th>权限名称</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for grouppermission in group_permissions %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ grouppermission.content_type.app_label }}</td>
+                <td>{{ grouppermission.content_type.model }}</td>
+                <td>{{ grouppermission.name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

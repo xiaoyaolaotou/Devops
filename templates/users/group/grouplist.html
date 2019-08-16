@@ -32,7 +32,7 @@
                 <td>
                     <a type="button" class="btn btn-primary btn-sm"
                        href="{% url 'accounts:group_userlist' %}?gid={{ group_obj.id }}">成员列表</a>
-                    <button type="button" class="btn btn-success btn-sm">查看权限</button>
+                    <a href="{% url 'accounts:permission_view' %}?id={{ group_obj.id }}" type="button" class="btn btn-success btn-sm">查看权限</a>
                     {% if perms.auth.change_group %}
                         <a class="btn btn-info btn-sm"
                            href="{% url 'accounts:group_permission_modify' %}?gid={{ group_obj.id }}">修改权限</a>

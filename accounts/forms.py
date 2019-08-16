@@ -21,7 +21,7 @@ class RegisterCreateUser(forms.Form):
     username = fields.CharField(required=True,
                                 label="用户名:",
                                 widget=widgets.TextInput(attrs={'class': 'form-control'}),
-                                min_length=3, max_length=32, error_messages={
+                                min_length=5, max_length=32, error_messages={
             'required': '用户名不能为空',
             'min_length': '用户名不能少于3个字符',
             'max_length': '用户名不能大于32个字符',
@@ -31,7 +31,7 @@ class RegisterCreateUser(forms.Form):
     password = fields.CharField(required=True,
                                 label="密码:",
                                 widget=widgets.PasswordInput(attrs={'class': 'form-control'}),
-                                min_length=3, max_length=10, error_messages={
+                                min_length=5, max_length=10, error_messages={
             'required': '密码不能为空',
             'min_length': '密码不能少于3个字符',
             'max_length': '密码不能大于10个字符'
@@ -40,7 +40,7 @@ class RegisterCreateUser(forms.Form):
     re_password = fields.CharField(required=True,
                                    label="再次输入密码:",
                                    widget=widgets.PasswordInput(attrs={'class': 'form-control'}),
-                                   min_length=3, max_length=10, error_messages={
+                                   min_length=5, max_length=10, error_messages={
             'required': '密码不能为空',
         })
 
@@ -80,3 +80,31 @@ class RegisterCreateUser(forms.Form):
             return self.cleaned_data
 
 
+class ChangeUserPwd(forms.Form):
+    """修改密码"""
+    password = fields.CharField(required=True,
+                                label="密码:",
+                                widget=widgets.PasswordInput(attrs={'class': 'form-control'}),
+                                min_length=5, max_length=10, error_messages={
+            'required': '密码不能为空',
+            'min_length': '密码不能少于5个字符',
+            'max_length': '密码不能大于10个字符'
+        })
+
+    re_password = fields.CharField(required=True,
+                                   label="再次输入密码:",
+                                   widget=widgets.PasswordInput(attrs={'class': 'form-control'}),
+                                   min_length=5, max_length=10, error_messages={
+            'required': '密码不能为空',
+        })
+
+
+    def clean(self):
+        password1 = self.cleaned_data.get("password")
+        password2 = self.cleaned_data.get("re_password")
+
+        if password1 and password2 and password1 != password2:
+            self.add_error('re_password', '两次密码不一致')
+            return None
+        else:
+            return self.cleaned_data

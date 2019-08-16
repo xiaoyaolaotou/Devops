@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect, QueryDict
-from django.views.generic import View, ListView, TemplateView
+from django.views.generic import View, ListView, TemplateView, DetailView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import permission_required, login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionDenied, PermissionRequiredMixin
@@ -279,7 +279,7 @@ class GroupGrouplistView(LoginRequiredMixin, View):
         return JsonResponse(ret)
 
 
-class ModifyGroupPermissionList(ListView):
+class ModifyGroupPermissionList(LoginRequiredMixin, ListView):
     """查看组权限"""
     template_name = "users/group/modify_group_permissions.html"
     model = ContentType
@@ -292,6 +292,7 @@ class ModifyGroupPermissionList(ListView):
         return context
 
     def get_group_permission(self, groupid):
+        """获取组权限"""
         try:
             group_obj = Group.objects.get(pk=groupid)
             return [p.id for p in group_obj.permissions.all()]
@@ -301,7 +302,6 @@ class ModifyGroupPermissionList(ListView):
 
 
     def post(self, request):
-        print(request.POST)
         permission_id_list = request.POST.getlist("permission", [])
         groupid = request.POST.get("groupid", 0)
         try:
@@ -315,6 +315,78 @@ class ModifyGroupPermissionList(ListView):
             group_obj.permissions.clear() #如果传过来没有值, 则表示清空权限
         # return HttpResponse("修改成功")
         return HttpResponseRedirect(reverse("accounts:grouplist"))
+
+
+
+class UserChangePwd(LoginRequiredMixin, View):
+    """修改用户密码"""
+    def get(self, request,):
+        form = forms.ChangeUserPwd()
+        uid = request.GET.get("id")
+        try:
+            u = User.objects.get(pk=uid)
+            return render(request, "users/changepassword.html", {"form":form, "u":u, "uid":uid})
+        except Exception as e:
+            return HttpResponse("有错误,返回重新设置密码")
+
+
+    def post(self, request):
+        uid = request.POST.get("uid", 0)
+        form = forms.ChangeUserPwd(request.POST)
+        ret = {'status': "false", 'error': None, 'data': None}
+
+        if form.is_valid():
+            password = form.cleaned_data.get("password")
+            re_password = form.cleaned_data.get("re_password")
+
+            try:
+                username = User.objects.get(pk=uid)
+                if username:
+                    username.set_password(password)
+                    username.save()
+                    return HttpResponseRedirect(reverse("accounts:userlist"))
+                else:
+                    return render(request, "users/changepassword.html", locals())
+            except Exception as e:
+                return HttpResponseRedirect(reverse("accounts:changepasswd"))
+        else:
+            return render(request, "users/changepassword.html", locals())
+
+        form = forms.ChangeUserPwd()
+        return render(request, "users/changepassword.html", locals())
+
+
+class PermissionViewView(LoginRequiredMixin, ListView):
+    """查看用户组权限"""
+    login_url = "/login/"
+    model = Permission
+    template_name = "users/group/group_view_user_permissions.html"
+    context_object_name = "group_permission"
+    paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+
+        context = super(PermissionViewView, self).get_context_data(object_list=None, **kwargs)
+        context["group_permissions"] = self.get_group_permission(self.request.GET.get("id"))
+
+        return context
+
+    def get_group_permission(self, gid):
+        """获取组权限"""
+        try:
+            groupid = Group.objects.get(pk=gid)
+            print(groupid.permissions.all())
+            return [p for p in groupid.permissions.all()]
+        except:
+            return HttpResponse("没有")
+
+
+
+
+
+
+
+
 
 
 

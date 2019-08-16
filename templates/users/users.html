@@ -57,10 +57,17 @@
                         </button>
 
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+
+                             <li role="presentation">
+                                <a href="{% url 'accounts:changepasswd' %}?id={{ us.id }}" class="changepassword" data="{{ us.id }}" role="menuitem" tabindex="-1"
+                                     >修改密码</a>
+                            </li>
+
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1"
                                    data={{ us.id }}  class="user_to_group">添加到指定组</a>
                             </li>
+
                         </ul>
                     {% endif %}
 
@@ -228,6 +235,8 @@
 
 
             });
+
+
 
 
         });
