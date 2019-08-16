@@ -46,7 +46,7 @@
         <!-- 第一层第二个图标-->
         <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box">
-                <span class="info-box-icon bg-red"><i class="fa fa-google-plus"></i></span>
+                <span class="info-box-icon bg-red"><i class="fa fa-hdd-o"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Vmware虚拟机</span>
                     <span class="info-box-number">{{ vmware }}
@@ -61,7 +61,7 @@
         <!-- 第一层第三个图标-->
         <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box">
-                <span class="info-box-icon bg-green"><i class="ion ion-ios-cart-outline"></i></span>
+                <span class="info-box-icon bg-green"><i class="fa fa-server"></i></span>
 
                 <div class="info-box-content">
                     <span class="info-box-text">KVM虚拟机</span>
@@ -99,6 +99,7 @@
             </div>
         </div>
         <button type="submit" class="btn btn-primary">搜索</button>
+        <a href="{% url 'assets:export' %}" class="btn btn-warning" type="button">导出excel</a>
 
     </form>
 
