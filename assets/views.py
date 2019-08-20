@@ -15,6 +15,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from pure_pagination.mixins import PaginationMixin
 from django.db.models import Q
+from django.conf import settings
 
 #自定义模块
 from assets import models
@@ -24,15 +25,17 @@ class IndexVew(LoginRequiredMixin, PaginationMixin, ListView):
     """首页"""
     model = models.Assets
     login_url = "/login/"
-    paginate_by = 10
+    # paginate_by = 10
+    paginate_by = 1
     template_name = "assets/assets.html"
     keyword = ''
+    ordering = '-id'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(IndexVew, self).get_context_data()
         context["count"] = models.Assets.objects.count()
         context["count_user"] = User.objects.all().count()
-        context["vmware"] = models.Assets.objects.filter(server_type__icontains="VMware Virtual Platform").count()  # VM虚拟机总数
+        context["vmware"] = models.Assets.objects.filter(server_type__icontains="VMware").count()  # VM虚拟机总数
         context["kvm"] = models.Assets.objects.filter(server_type__icontains="kvm").count()  # KVM虚拟机总数
         context["keyword"] = self.keyword
         return context
@@ -79,6 +82,7 @@ class CollectHostInfo(View):
     def post(self, request, *args, **kwargs):
 
         data = request.POST.dict()
+        print(data)
 
         try:
             obj = models.Assets.objects.get(uuid=data["uuid"])

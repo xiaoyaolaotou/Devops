@@ -41,14 +41,14 @@ INSTALLED_APPS = [
     'assets',
     'resources',
     'pure_pagination',
+    'gunicorn',
 
 ]
 
 PAGINATION_SETTINGS = {
-    'PAGE_RANGE_DISPLAYED': 10,
-    'MARGIN_PAGES_DISPLAYED': 2,
-
-    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+    'PAGE_RANGE_DISPLAYED': 1,
+    'MARGIN_PAGES_DISPLAYED': 1,
+    'SHOW_FIRST_PAGE_WHEN_INVALID': False,
 }
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True

@@ -1,0 +1,9 @@
+[2019-08-16 16:14:04 +0800] [108165] [INFO] Starting gunicorn 19.9.0
+[2019-08-16 16:14:04 +0800] [108165] [INFO] Listening at: http://192.168.1.100:8000 (108165)
+[2019-08-16 16:14:04 +0800] [108165] [INFO] Using worker: sync
+[2019-08-16 16:14:04 +0800] [108214] [INFO] Booting worker with pid: 108214
+[2019-08-16 16:14:04 +0800] [108215] [INFO] Booting worker with pid: 108215
+[2019-08-16 16:14:06 +0800] [108165] [INFO] Handling signal: int
+[2019-08-16 16:14:06 +0800] [108215] [INFO] Worker exiting (pid: 108215)
+[2019-08-16 16:14:06 +0800] [108214] [INFO] Worker exiting (pid: 108214)
+[2019-08-16 16:14:06 +0800] [108165] [INFO] Shutting down: Master

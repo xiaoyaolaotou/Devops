@@ -1,4 +1,6 @@
+import datetime
 from django.db import models
+from django.utils import timezone
 
 
 class Assets(models.Model):
@@ -24,6 +26,11 @@ class Assets(models.Model):
     vm_status           =  models.IntegerField(choices=CHOICE_VM_STATUS, verbose_name="状态")
     create_time         =  models.DateTimeField(auto_now_add=True, verbose_name="创建日期")
     update_time         =  models.DateTimeField(auto_now=True, verbose_name="更新日期")
+
+    @property
+    def is_online(self):
+        return timezone.now() - self.create_time(datetime.timedelta(minutes=2))
+
 
     class Meta:
         db_table = "assets"

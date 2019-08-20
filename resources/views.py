@@ -27,6 +27,7 @@ class RessourcessIndexView(LoginRequiredMixin ,PaginationMixin ,ListView):
     template_name = "resources/resources.html"
     login_url = "/login/"
     keyword = ''
+    ordering = '-id'
 
 
     def get_queryset(self):

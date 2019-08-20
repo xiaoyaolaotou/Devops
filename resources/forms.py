@@ -54,7 +54,7 @@ class CreateBussiness(forms.Form):
         required=True,
         label="业务用途",
         min_length=5,
-        max_length=20,
+        max_length=120,
         widget=widgets.TextInput(attrs={'class': 'form-control'}),
         error_messages={
             'required': '此项不能为空',
