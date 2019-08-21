@@ -13,7 +13,7 @@
 
 ![image](img/valid.png)
 
-![image](img/index.png)
+![image](img/status.png)
 
 ![image](img/分页.png)
 

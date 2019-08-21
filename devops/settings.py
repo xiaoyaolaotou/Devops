@@ -145,3 +145,6 @@ TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),)
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+GITLAB_HTTP_URI = "http://10.128.46.40"
+GITLAB_TOKEN = "udeR7ZU9JZ7uNzkaM7yR"

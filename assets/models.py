@@ -29,7 +29,7 @@ class Assets(models.Model):
 
     @property
     def is_online(self):
-        return timezone.now() - self.create_time(datetime.timedelta(minutes=2))
+        return timezone.now() - self.update_time < datetime.timedelta(hours=5)
 
 
     class Meta:

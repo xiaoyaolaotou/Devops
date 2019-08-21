@@ -25,8 +25,7 @@ class IndexVew(LoginRequiredMixin, PaginationMixin, ListView):
     """首页"""
     model = models.Assets
     login_url = "/login/"
-    # paginate_by = 10
-    paginate_by = 1
+    paginate_by = 10
     template_name = "assets/assets.html"
     keyword = ''
     ordering = '-id'

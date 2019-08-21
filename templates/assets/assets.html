@@ -105,18 +105,19 @@
 
     <table class="table table-bordered table-hover table-striped" style="margin-top: 10px">
         <thead align="center">
-        <tr>
-            <th>#</th>
-            <th>主机名</th>
-            <th>IP地址</th>
-            <th>CPU</th>
-            <th>内存</th>
-            <th>磁盘</th>
-            <th>主机类型</th>
-            <th>系统</th>
-            <th>创建日期</th>
-            <th>更新日期</th>
-            <th>操作</th>
+        <tr >
+            <th class="text-center">#</th>
+            <th class="text-center">主机名</th>
+            <th class="text-center">IP地址</th>
+            <th class="text-center">CPU</th>
+            <th class="text-center">内存</th>
+            <th class="text-center">磁盘</th>
+            <th class="text-center">主机类型</th>
+            <th class="text-center">系统</th>
+            <th class="text-center">创建日期</th>
+            <th class="text-center">更新日期</th>
+            <th class="text-center">状态</th>
+            <th class="text-center">操作</th>
         </tr>
         </thead>
         <tbody align="center">
@@ -132,9 +133,14 @@
                 <td>{{ host.os }}</td>
                 <td>{{ host.create_time |date:"Y-m-d H:i" }}</td>
                 <td>{{ host.update_time |date:"Y-m-d H:i" }}</td>
-                {#                <td style="padding: 0; margin: 0">#}
-                {#                    <a type="button" class="btn btn-sm btn-success" href="">编辑</a>#}
-                {#                </td>#}
+                <td style="padding: 0; margin: 0">
+                    {% if host.is_online == True %}
+                        <button type="button" class="btn btn-success btn-sm">在线</button>
+                        {% else %}
+                        <button type="button" class="btn btn-danger btn-sm">离线</button>
+                    {% endif %}
+                </td>
+
                 <td style="padding: 0; margin: 0">
                     <button type="button" id="" class="btn btn-sm btn-danger delete-user" data="{{ host.id }}">删除
                     </button>
