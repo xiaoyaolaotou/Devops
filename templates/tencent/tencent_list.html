@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}腾讯云{% endblock %}
+
+{% block breadcrunb %}
+
+    <h2>腾讯云列表</h2>
+
+{% endblock %}
+
+
+
+
+{% block content %}
+
+        <form class="form-inline"
+          enctype="multipart/form-data">
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" class="form-control" id="exampleInputAmount" name="keyword"
+                       placeholder="外网IP地址/内网IP/区域" value="{% if keyword %}{{ keyword }} {% endif %}">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">搜索</button>
+
+
+        <a href="{% url 'resources:resource_upload' %}" class="btn btn-warning" type="button">导出excel</a>
+
+    </form>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+{#                <th>#</th>#}
+                <th>实例ID</th>
+                <th>实例名称</th>
+                <th>区域</th>
+                <th>CPU</th>
+                <th>内存</th>
+                <th>磁盘</th>
+                <th>内网IP</th>
+                <th>外网IP</th>
+                <th>实例状态</th>
+                <th>创建时间</th>
+                <th>过期时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tencent_instance in tencent %}
+                {% for tencent_instance_get in tencent_instance.InstanceSet %}
+                <tr>
+{#                    <td>{{ forloop.counter }}</td>#}
+                    <td>{{ tencent_instance_get.InstanceId }}</td>
+                    <td>{{ tencent_instance_get.InstanceName  }}</td>
+                    <td>{{ tencent_instance_get.Placement.Zone }}</td>
+                    <td>{{ tencent_instance_get.CPU  }}核</td>
+                    <td>{{ tencent_instance_get.Memory  }}G</td>
+                    <td>{{ tencent_instance_get.SystemDisk.DiskSize }}G</td>
+                    <td>{{ tencent_instance_get.PrivateIpAddresses.0  }}</td>
+                    <td>{{ tencent_instance_get.PublicIpAddresses.0  }}</td>
+                    <td>{{ tencent_instance_get.InstanceState  }}</td>
+                    <td>{{ tencent_instance_get.CreatedTime  }}</td>
+                    <td>{{ tencent_instance_get.ExpiredTime  }}</td>
+                </tr>
+                    {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+    <!-- 分页 -->
+     <div class="row">
+        <div class="col-sm-6">
+            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                显示 [{{ paginator.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 的数据
+            </div>
+        </div>
+        {% include "paginator.html" %}
+    </div>
+{% endblock %}

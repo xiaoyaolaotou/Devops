@@ -16,6 +16,7 @@ from django.contrib.auth.models import User
 from pure_pagination.mixins import PaginationMixin
 from django.db.models import Q
 from django.conf import settings
+from django.core.mail import send_mail
 
 #自定义模块
 from assets import models

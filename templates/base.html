@@ -138,27 +138,30 @@
 
                 <!-- 用户权限管理 -->
                 {% if perms.auth.view_user %}
-                <li class="treeview">
-                    <a href="#">
-                        <i class="fa fa-users"></i>
-                        <span>用户权限管理</span>
-                        <span class="pull-right-container">
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-users"></i>
+                            <span>用户权限管理</span>
+                            <span class="pull-right-container">
           <i class="fa fa-angle-left pull-right"></i>
         </span>
-                    </a>
-                    <ul class="treeview-menu">
+                        </a>
+                        <ul class="treeview-menu">
 
                             <li><a href="{% url 'accounts:userlist' %}"><i class="fa fa-circle-o"></i> 用户管理</a></li>
                             <li><a href="{% url 'accounts:grouplist' %}"><i class="fa fa-circle-o"></i> 用户组管理</a></li>
                             <li><a href="{#% url 'users:role_list' %#}"><i class="fa fa-circle-o"></i> 角色管理</a></li>
-                            <li><a href="{% url 'accounts:permission_list' %}"><i class="fa fa-circle-o"></i> 权限管理</a></li>
-{#                        {% else %}#}
-{#                            <li><a href="{#% url 'users:user_detail' request.user.id %#}"><i class="fa fa-circle-o"></i>个人中心</a>#}
-{#                            </li>#}
-{#                            <li><a href="{#% url 'users:user_detail' request.user.id %#}"><i class="fa fa-circle-o"></i>用户列表</a>#}
+                            <li><a href="{% url 'accounts:permission_list' %}"><i class="fa fa-circle-o"></i> 权限管理</a>
+                            </li>
+                            {#                        {% else %}#}
+                            {#                            <li><a href="{#% url 'users:user_detail' request.user.id %#}"><i
+                                class="fa fa-circle-o"></i>个人中心</a>#}
+                            {#                            </li>#}
+                            {#                            <li><a href="{#% url 'users:user_detail' request.user.id %#}"><i
+                                class="fa fa-circle-o"></i>用户列表</a>#}
 
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
                 {% endif %}
 
                 <!-- CMDB系统 -->
@@ -172,7 +175,24 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="{% url 'resources:resource_list' %}"><i class="fa fa-circle-o"></i> 业务线管理</a></li>
-{#                        <li><a href="{#% url 'cmdb:product_detail' 1 %#}"><i class="fa fa-circle-o"></i> 产品线管理</a></li>#}
+                        {#                        <li><a href="{#% url 'cmdb:product_detail' 1 %#}"><i
+                            class="fa fa-circle-o"></i> 产品线管理</a></li>#}
+                    </ul>
+                </li>
+
+                <!-- 多云CMDB -->
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-database"></i>
+                        <span>多云CMDB</span>
+                        <span class="pull-right-container">
+          <i class="fa fa-angle-left pull-right"></i>
+        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{% url 'cloud:tencent_list' %}"><i class="fa fa-circle-o"></i> 腾讯云</a></li>
+                        <li><a href="{#  #}% url 'cmdb:product_detail' 1 %"><i class="fa fa-circle-o"></i> 阿里云</a></li>
                     </ul>
                 </li>
 

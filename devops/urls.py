@@ -21,5 +21,6 @@ urlpatterns = [
     path('', include("accounts.urls")),
     path('', include("assets.urls")),
     path('resources/', include("resources.urls")),
+    path('cloud/',include("cloud.urls")),
 
 ]

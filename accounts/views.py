@@ -7,6 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionDenied, Per
 from django.contrib.auth.models import User, Group, Permission, ContentType
 from pure_pagination.mixins import PaginationMixin
 from django.utils.decorators import method_decorator
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 
@@ -97,6 +99,8 @@ class UserInfoView(LoginRequiredMixin, PermissionRequried, PaginationMixin, List
         try:
             if  request.user.has_perm('auth.delete_user'):
                 User.objects.filter(pk=data).delete()
+                send_mail("删除用户", User.objects.get(pk=data).username,settings.EMAIL_FROM,
+                          ['zhangzihong@gome.com.cn', '597274490@qq.com'], fail_silently=False)
             else:
                 ret["status"] = 1
                 ret["errmsg"] = "你没有删除用户的权限"

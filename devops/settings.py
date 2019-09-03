@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'resources',
     'pure_pagination',
     'gunicorn',
+    'djcelery',
+    'cloud',
 
 ]
 
@@ -148,3 +150,33 @@ STATICFILES_DIRS = (
 
 GITLAB_HTTP_URI = "http://10.128.46.40"
 GITLAB_TOKEN = "udeR7ZU9JZ7uNzkaM7yR"
+
+
+EMAIL_HOST = "smtp.exmail.qq.com"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "123@qq.com"
+EMAIL_HOST_PASSWORD = "*******"
+EMAIL_USE_SSL = True
+EMAIL_FROM = "123@qq.com"
+
+
+import djcelery
+
+djcelery.setup_loader()
+
+BROKER_URL = 'redis://192.168.1.100:6379/0'     # redis作为中间件
+BROKER_TRANSPORT = 'redis'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'     # Backend数据库
+
+CELERYD_LOG_FILE = BASE_DIR + "/logs/celery/celery.log"         # log路径
+CELERYBEAT_LOG_FILE = BASE_DIR + "/logs/celery/beat.log"     # beat log路径
+
+
+# tencent API
+
+SECRETID = 'AKIDvpUt33YTmsZEe6DVSDjCZicIlywepm22'
+SECRETKEY = 'ub4KYYJp7A1e3D9rNfihRxDEzUjimcmm'
+
+REGION = ['ap-chengdu','ap-chongqing']
+
+
