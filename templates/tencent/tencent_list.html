@@ -13,70 +13,90 @@
 
 {% block content %}
 
-        <form class="form-inline"
-          enctype="multipart/form-data">
-        <div class="form-group">
-            <div class="input-group">
-                <input type="text" class="form-control" id="exampleInputAmount" name="keyword"
-                       placeholder="外网IP地址/内网IP/区域" value="{% if keyword %}{{ keyword }} {% endif %}">
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">搜索</button>
-
-
-        <a href="{% url 'resources:resource_upload' %}" class="btn btn-warning" type="button">导出excel</a>
-
-    </form>
-
-
-    <table class="table">
+    <table class="table table-striped table-bordered table-hover" id="myTable">
         <thead>
-            <tr>
-{#                <th>#</th>#}
-                <th>实例ID</th>
-                <th>实例名称</th>
-                <th>区域</th>
-                <th>CPU</th>
-                <th>内存</th>
-                <th>磁盘</th>
-                <th>内网IP</th>
-                <th>外网IP</th>
-                <th>实例状态</th>
-                <th>创建时间</th>
-                <th>过期时间</th>
-                <th>操作</th>
-            </tr>
+        <tr>
+            {#                <th>#</th>#}
+            <th>实例ID</th>
+            <th>实例名称</th>
+            <th>区域</th>
+            <th>CPU</th>
+            <th>内存</th>
+            <th>磁盘</th>
+            <th>内网IP</th>
+            <th>外网IP</th>
+            <th>实例状态</th>
+            <th>创建时间</th>
+            <th>过期时间</th>
+            <th>操作</th>
+        </tr>
         </thead>
         <tbody>
-            {% for tencent_instance in tencent %}
-                {% for tencent_instance_get in tencent_instance.InstanceSet %}
+        {% for tencent_instance in tencent %}
+            {% for tencent_instance_get in tencent_instance.InstanceSet %}
                 <tr>
-{#                    <td>{{ forloop.counter }}</td>#}
+                    {#                    <td>{{ forloop.counter }}</td>#}
                     <td>{{ tencent_instance_get.InstanceId }}</td>
-                    <td>{{ tencent_instance_get.InstanceName  }}</td>
+                    <td>{{ tencent_instance_get.InstanceName }}</td>
                     <td>{{ tencent_instance_get.Placement.Zone }}</td>
-                    <td>{{ tencent_instance_get.CPU  }}核</td>
-                    <td>{{ tencent_instance_get.Memory  }}G</td>
+                    <td>{{ tencent_instance_get.CPU }}核</td>
+                    <td>{{ tencent_instance_get.Memory }}G</td>
                     <td>{{ tencent_instance_get.SystemDisk.DiskSize }}G</td>
-                    <td>{{ tencent_instance_get.PrivateIpAddresses.0  }}</td>
-                    <td>{{ tencent_instance_get.PublicIpAddresses.0  }}</td>
-                    <td>{{ tencent_instance_get.InstanceState  }}</td>
-                    <td>{{ tencent_instance_get.CreatedTime  }}</td>
-                    <td>{{ tencent_instance_get.ExpiredTime  }}</td>
+                    <td>{{ tencent_instance_get.PrivateIpAddresses.0 }}</td>
+                    <td>{{ tencent_instance_get.PublicIpAddresses.0 }}</td>
+                    <td>
+                        {% if tencent_instance_get.InstanceState == 'STOPPED' %}
+                            <a class="btn-sm btn-danger">停止</a>
+                        {% else %}
+                            <a class="btn-sm btn-success">运行</a>
+                        {% endif %}
+
+                    </td>
+                    <td>{{ tencent_instance_get.CreatedTime }}</td>
+                    <td>{{ tencent_instance_get.ExpiredTime }}</td>
+                    <td>
+                        <a class="btn-sm btn-primary">详情</a>
+                    </td>
                 </tr>
-                    {% endfor %}
+            {% endfor %}
         {% endfor %}
         </tbody>
     </table>
 
 
-    <!-- 分页 -->
-     <div class="row">
-        <div class="col-sm-6">
-            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
-                显示 [{{ paginator.count }}] 条数据中的 第 [{{ page_obj.start_index }}] 至 [{{ page_obj.end_index }}] 的数据
-            </div>
-        </div>
-        {% include "paginator.html" %}
-    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#myTable').DataTable({
+                language: {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                }
+            });
+        });
+    </script>
+
 {% endblock %}

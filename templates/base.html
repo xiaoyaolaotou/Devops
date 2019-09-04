@@ -33,8 +33,9 @@
 
     <!-- DataTble样式 -->
     <link rel="stylesheet" href="/static/css/datatable.css">
-    <link rel="stylesheet" href="/static/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/static/css/dataTables.bootstrap.min.css">
+
 
     <!-- 子页面可以自定义引入css -->
     {% block css %}
@@ -272,7 +273,7 @@
 
 
 <!-- 公共js部分 -->
-<script src="{% static 'js/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 <script src="{% static 'js/jquery.cookie.js' %}"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -301,9 +302,10 @@
 
 
 <!--DataTable-->
-<script src="{% static 'js/datatable.js' %}"></script>
-{#<script src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>#}
-<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+{#<script src="{% static 'js/datatable.js' %}"></script>#}
+<script type="text/javascript" src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
+
 
 
 <!-- 子页面可以根据需要添加js -->

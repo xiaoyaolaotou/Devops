@@ -25,7 +25,7 @@
 
 ![image](img/permission.png)
 
-![image](img/tencent.png)
+![image](img/tengxun.png)
 ### 开发进度
 
 - 持续开发中
